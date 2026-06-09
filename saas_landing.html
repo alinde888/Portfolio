@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataFlow — Portfolio Design Sample</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:     #0d0d14;
+    --surface: #13131f;
+    --card:    #1a1a2b;
+    --border:  #2a2a40;
+    --violet:  #7c5cfc;
+    --cyan:    #00e5c3;
+    --muted:   #7b7b9a;
+    --text:    #e8e8f0;
+  }
+
+  body {
+    background: var(--ink);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ── NAV ── */
+  nav {
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 40px;
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    color: #fff;
+    letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--cyan); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; transition: color .2s; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    background: var(--violet);
+    color: #fff;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+  .nav-cta:hover { opacity: .85; }
+
+  /* ── HERO ── */
+  .hero {
+    width: 100%;
+    max-width: 1100px;
+    padding: 80px 40px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(124,92,252,.12);
+    border: 1px solid rgba(124,92,252,.3);
+    color: var(--violet);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 24px;
+  }
+  .badge::before {
+    content: '';
+    width: 7px; height: 7px;
+    background: var(--violet);
+    border-radius: 50%;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    margin-bottom: 20px;
+  }
+  h1 em {
+    font-style: normal;
+    background: linear-gradient(90deg, var(--violet), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.65;
+    margin-bottom: 36px;
+    max-width: 440px;
+  }
+
+  .cta-row { display: flex; gap: 12px; align-items: center; }
+  .btn-primary {
+    background: var(--violet);
+    color: #fff;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+    box-shadow: 0 0 24px rgba(124,92,252,.35);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 0 36px rgba(124,92,252,.5); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+    transition: border-color .2s;
+  }
+  .btn-ghost:hover { border-color: var(--muted); }
+
+  .social-proof {
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .avatars { display: flex; }
+  .avatars span {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    background: var(--card);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    margin-left: -8px;
+  }
+  .avatars span:first-child { margin-left: 0; }
+  .proof-text { font-size: 13px; color: var(--muted); }
+  .proof-text strong { color: var(--text); }
+
+  /* ── DASHBOARD MOCKUP ── */
+  .mockup {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,.5);
+  }
+  .mockup-bar {
+    background: var(--card);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .mockup-body { padding: 20px; }
+  .mock-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .mock-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; }
+  .mock-tag {
+    background: rgba(0,229,195,.1);
+    color: var(--cyan);
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .mock-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .mock-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .mock-card-label { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .mock-card-val { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; }
+  .mock-card-val.up { color: var(--cyan); }
+  .mock-card-val.vl { color: var(--violet); }
+  .mock-bar-row { display: flex; flex-direction: column; gap: 8px; }
+  .mock-bar-item { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+  .mock-bar-label { width: 60px; color: var(--muted); flex-shrink: 0; }
+  .mock-bar-track {
+    flex: 1; height: 6px;
+    background: var(--border);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+  .mock-bar-fill { height: 100%; border-radius: 100px; }
+  .mock-bar-pct { width: 32px; text-align: right; color: var(--muted); }
+
+  /* ── STATS ROW ── */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    padding: 50px 40px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    width: 100%;
+    max-width: 1100px;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+  }
+  .stat-num span { color: var(--cyan); }
+  .stat-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Data<span>Flow</span></div>
+  <ul class="nav-links">
+    <li><a href="#">Features</a></li>
+    <li><a href="#">Pricing</a></li>
+    <li><a href="#">Docs</a></li>
+    <li><a href="#">Blog</a></li>
+  </ul>
+  <button class="nav-cta">Get started free</button>
+</nav>
+
+<section class="hero">
+  <!-- Left: copy -->
+  <div>
+    <div class="badge">Now in public beta</div>
+    <h1>Turn raw data into<br><em>clear decisions</em></h1>
+    <p class="subtitle">
+      DataFlow connects to your existing tools, cleans the noise, and surfaces
+      the metrics that actually drive growth — in real time.
+    </p>
+    <div class="cta-row">
+      <button class="btn-primary">Start for free →</button>
+      <button class="btn-ghost">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="7.5" stroke="#7b7b9a"/>
+          <path d="M6 5.5l5 2.5-5 2.5V5.5z" fill="#7b7b9a"/>
+        </svg>
+        Watch demo
+      </button>
+    </div>
+    <div class="social-proof">
+      <div class="avatars">
+        <span>🧑</span><span>👩</span><span>🧔</span><span>👧</span>
+      </div>
+      <p class="proof-text"><strong>2,400+ teams</strong> already use DataFlow</p>
+    </div>
+  </div>
+
+  <!-- Right: dashboard mockup -->
+  <div class="mockup">
+    <div class="mockup-bar">
+      <div class="dot" style="background:#f43f5e"></div>
+      <div class="dot" style="background:#f59e0b"></div>
+      <div class="dot" style="background:#10b981"></div>
+    </div>
+    <div class="mockup-body">
+      <div class="mock-header">
+        <span class="mock-title">Live Dashboard</span>
+        <span class="mock-tag">● Live</span>
+      </div>
+      <div class="mock-cards">
+        <div class="mock-card">
+          <div class="mock-card-label">Monthly Revenue</div>
+          <div class="mock-card-val up">$38.7k</div>
+        </div>
+        <div class="mock-card">
+          <div class="mock-card-label">Active Users</div>
+          <div class="mock-card-val vl">11,040</div>
+        </div>
+      </div>
+      <div class="mock-bar-row">
+        <div class="mock-bar-item">
+          <span class="mock-bar-label">Organic</span>
+          <div class="mock-bar-track"><div class="mock-bar-fill" style="width:72%;background:var(--violet)"></div></div>
+          <span class="mock-bar-pct">72%</span>
+        </div>
+        <div class="mock-bar-item">
+          <span class="mock-bar-label">Paid</span>
+          <div class="mock-bar-track"><div class="mock-bar-fill" style="width:48%;background:var(--cyan)"></div></div>
+          <span class="mock-bar-pct">48%</span>
+        </div>
+        <div class="mock-bar-item">
+          <span class="mock-bar-label">Referral</span>
+          <div class="mock-bar-track"><div class="mock-bar-fill" style="width:31%;background:#f59e0b"></div></div>
+          <span class="mock-bar-pct">31%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-num">99<span>.9%</span></div>
+    <div class="stat-label">Uptime SLA</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">2.4<span>k+</span></div>
+    <div class="stat-label">Teams onboarded</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">&lt;200<span>ms</span></div>
+    <div class="stat-label">Avg. query time</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">50<span>+</span></div>
+    <div class="stat-label">Integrations</div>
+  </div>
+</div>
+
+</body>
+</html>
